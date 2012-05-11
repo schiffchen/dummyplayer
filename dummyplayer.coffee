@@ -48,6 +48,8 @@ class DummyPlayer extends BasicBot
         @help(stanza.from)
       else if message.startsWith('ping matchmaker')
         @say('matchmaker@battleship.me', 'ping')
+      else if message.startsWith('queue me')
+        @queueMe()
       else
         @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
@@ -55,6 +57,11 @@ class DummyPlayer extends BasicBot
     @say(to, """You wanna help? Here you are:
       help - Shows this message
       ping matchmaker - Sends a chat message to the matchmaker""")
+      
+  queueMe: ->
+    @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
+      .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
+      .c('queueing', {'action': 'request'})
     
 #-----------------------------------------------------------------------------#
 
