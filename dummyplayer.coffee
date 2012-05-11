@@ -56,7 +56,8 @@ class DummyPlayer extends BasicBot
   help: (to) ->
     @say(to, """You wanna help? Here you are:
       help - Shows this message
-      ping matchmaker - Sends a chat message to the matchmaker""")
+      ping matchmaker - Sends a chat message to the matchmaker
+      queue me - Ask the matchmaker to enqueue the dummyplayer""")
       
   queueMe: ->
     @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
