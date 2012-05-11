@@ -46,6 +46,8 @@ class DummyPlayer extends BasicBot
       message = body.getText()
       if message.startsWith('help')
         @help(stanza.from)
+      if message.startsWith('ping matchmaker')
+        @say('matchmaker@battleship.me', 'ping')
   
   help: (to) ->
     @say(to, "No commands yet :(")
