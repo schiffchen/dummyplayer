@@ -46,11 +46,15 @@ class DummyPlayer extends BasicBot
       message = body.getText()
       if message.startsWith('help')
         @help(stanza.from)
-      if message.startsWith('ping matchmaker')
+      else if message.startsWith('ping matchmaker')
         @say('matchmaker@battleship.me', 'ping')
+      else
+        @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
   help: (to) ->
-    @say(to, "No commands yet :(")
+    @say(to, """You wanna help? Here you are:
+      help - Shows this message
+      ping matchmaker - Sends a chat message to the matchmaker""")
     
 #-----------------------------------------------------------------------------#
 
