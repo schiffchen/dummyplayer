@@ -39,6 +39,8 @@ class DummyPlayer extends BasicBot
         when 'message'
           if stanza.type == 'chat'
             @processCommand(stanza)
+          else if stanza.type == 'normal'
+            @processAction(stanza)
 
   processCommand: (stanza) ->
     body = stanza.getChild('body')
@@ -50,9 +52,19 @@ class DummyPlayer extends BasicBot
         @say('matchmaker@battleship.me', 'ping')
       else if message.startsWith('queue me')
         @queueMe()
+        globarr['queue_answer_to'] = stanza.from
       else
         @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
+  processAction: (stanza) ->
+    battleship = stanza.getChild('battleship')
+    if battleship
+      if queueing = battleship.getChild('queueing')
+        if queueing.attrs.action == 'success'
+          queue = battleship.getChild('queue')
+          @say(globarr['queue_answer_to'], "I am in the queue! Queue-ID ##{queue.attrs.id}")
+          globarr['queue_answer_to'] = ''
+          
   help: (to) ->
     @say(to, """You wanna help? Here you are:
       help - Shows this message
@@ -64,10 +76,14 @@ class DummyPlayer extends BasicBot
       .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
       .c('queueing', {'action': 'request'})
     
+    
 #-----------------------------------------------------------------------------#
 
 client = new xmpp.Client({jid: process.env.PLAYER_JID, password: process.env.PLAYER_PASSWORD})
 dp = new DummyPlayer(client)
+
+# ToDo: Hacky global cache
+globarr = new Array()
 
 #-----------------------------------------------------------------------------#
 
