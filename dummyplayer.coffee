@@ -68,6 +68,8 @@ class DummyPlayer extends BasicBot
         @help(stanza.from)
       else if message.startsWith('ping matchmaker')
         @say('matchmaker@battleship.me', 'ping')
+      else if message.startsWith('ping queue')
+        @pingQueue()
       else if message.startsWith('queue me')
         @queueMe()
         globarr['queue_answer_to'] = stanza.from
@@ -100,6 +102,16 @@ class DummyPlayer extends BasicBot
       ping matchmaker - Sends a chat message to the matchmaker
       queue me - Ask the matchmaker to enqueue the dummyplayer""")
   
+  ###
+    pingQueue
+    
+    Sends a ping to to the matchmaker to keep the queue alive
+  ###
+  pingQueue: ->
+    @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
+      .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
+      .c('queueing', {'action': 'ping', 'id': globarr['queueid']})
+      
   ###
     queueMe
     
