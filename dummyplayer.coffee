@@ -68,7 +68,7 @@ class DummyPlayer extends BasicBot
         @help(stanza.from)
       else if message.startsWith('ping matchmaker')
         @say('matchmaker@battleship.me', 'ping')
-      else if message.startsWith('ping queue')
+      else if message.startsWith('queue ping')
         @pingQueue()
       else if message.startsWith('queue me')
         @queueMe()
@@ -102,7 +102,7 @@ class DummyPlayer extends BasicBot
     @say(to, """You wanna help? Here you are:
       help - Shows this message
       ping matchmaker - Sends a chat message to the matchmaker
-      ping queue - Pings the queue to keep it alive
+      queue ping - Pings the queue to keep it alive
       queue me - Ask the matchmaker to enqueue the dummyplayer
       queue id - Shows the current queue id""")
   
