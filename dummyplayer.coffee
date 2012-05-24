@@ -73,6 +73,8 @@ class DummyPlayer extends BasicBot
       else if message.startsWith('queue me')
         @queueMe()
         globarr['queue_answer_to'] = stanza.from
+      else if message.startsWith('queue id')
+        @say(stanza.from, "I am queue##{globarr['queueid']}")
       else
         @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
