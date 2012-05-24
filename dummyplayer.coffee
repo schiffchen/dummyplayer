@@ -102,7 +102,9 @@ class DummyPlayer extends BasicBot
     @say(to, """You wanna help? Here you are:
       help - Shows this message
       ping matchmaker - Sends a chat message to the matchmaker
-      queue me - Ask the matchmaker to enqueue the dummyplayer""")
+      ping queue - Pings the queue to keep it alive
+      queue me - Ask the matchmaker to enqueue the dummyplayer
+      queue id - Shows the current queue id""")
   
   ###
     pingQueue
