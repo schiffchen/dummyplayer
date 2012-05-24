@@ -3,6 +3,9 @@ DummyPlayer Bot
   Just a basic bot for providing a debug interface
 
 (c) 2012, Schiffchen Team <schiffchen@dsx.cc>
+
+This server is designed to run on heroku. Therefore, we are using environment
+variables to allow our deploying machine to set up the settings dynamically.
 ###
 
 #-----------------------------------------------------------------------------#
@@ -27,12 +30,22 @@ class BasicBot
 #-----------------------------------------------------------------------------#
 
 class DummyPlayer extends BasicBot
+  ###
+    showReadyStatus
+    
+    Tell everyone the dummyplayer is ready to play.
+  ###
   showReadyStatus: ->
     @xmppClient.send new xmpp.Element('presence', {})
       .c('show').t('chat').up()
       .c('status').t('The dummyplayer is ready!').up()
       .c('priority').t('0')
 
+  ###
+    handleStanza
+    
+    General handler for all incoming stanzas
+  ###
   handleStanza: (stanza) ->
     if stanza.attrs.type != 'error'
       switch stanza.name
@@ -42,6 +55,11 @@ class DummyPlayer extends BasicBot
           else if stanza.type == 'normal'
             @processAction(stanza)
 
+  ###
+    processCommand
+    
+    Handler for command stanzas. Just fires the functions to do further stuff
+  ###
   processCommand: (stanza) ->
     body = stanza.getChild('body')
     if body
@@ -56,6 +74,11 @@ class DummyPlayer extends BasicBot
       else
         @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
+  ###
+    processAction
+    
+    Handler for battleship-game related stanzas coming in
+  ###
   processAction: (stanza) ->
     battleship = stanza.getChild('battleship')
     if battleship
@@ -64,13 +87,23 @@ class DummyPlayer extends BasicBot
           queue = battleship.getChild('queue')
           @say(globarr['queue_answer_to'], "I am in the queue! Queue-ID ##{queue.attrs.id}")
           globarr['queue_answer_to'] = ''
-          
+      
+  ###
+    help
+    
+    Just returns a little man page.
+  ###    
   help: (to) ->
     @say(to, """You wanna help? Here you are:
       help - Shows this message
       ping matchmaker - Sends a chat message to the matchmaker
       queue me - Ask the matchmaker to enqueue the dummyplayer""")
-      
+  
+  ###
+    queueMe
+    
+    Ask the matchmaker to enqueue me.
+  ###
   queueMe: ->
     @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
       .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
