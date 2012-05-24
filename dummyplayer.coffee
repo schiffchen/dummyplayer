@@ -87,6 +87,7 @@ class DummyPlayer extends BasicBot
           queue = battleship.getChild('queue')
           @say(globarr['queue_answer_to'], "I am in the queue! Queue-ID ##{queue.attrs.id}")
           globarr['queue_answer_to'] = ''
+          globarr['queueid'] = queue.attrs.id
       
   ###
     help
@@ -115,7 +116,8 @@ class DummyPlayer extends BasicBot
 client = new xmpp.Client({jid: process.env.PLAYER_JID, password: process.env.PLAYER_PASSWORD})
 dp = new DummyPlayer(client)
 
-# ToDo: Hacky global cache
+# global "cache", as we sometimes have to transfer stuff ignoring
+# nodejs non-blocking-io
 globarr = new Array()
 
 #-----------------------------------------------------------------------------#
