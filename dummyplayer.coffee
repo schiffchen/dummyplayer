@@ -88,10 +88,9 @@ class DummyPlayer extends BasicBot
     if battleship
       if queueing = battleship.getChild('queueing')
         if queueing.attrs.action == 'success'
-          queue = battleship.getChild('queue')
-          @say(globarr['queue_answer_to'], "I am in the queue! Queue-ID ##{queue.attrs.id}")
+          @say(globarr['queue_answer_to'], "I am in the queue! Queue-ID ##{queueing.attrs.id}")
           globarr['queue_answer_to'] = ''
-          globarr['queueid'] = queue.attrs.id
+          globarr['queueid'] = queueing.attrs.id
       
   ###
     help
