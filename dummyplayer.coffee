@@ -6,6 +6,10 @@ DummyPlayer Bot
 
 This server is designed to run on heroku. Therefore, we are using environment
 variables to allow our deploying machine to set up the settings dynamically.
+
+Used environment variables:
+  XMPP_JID      - The full jabber-id for the matchmaker.
+  XMPP_PASSWORD - The password for the matchmaker-jabber-account
 ###
 
 #-----------------------------------------------------------------------------#
@@ -169,7 +173,7 @@ class DummyPlayer extends BasicBot
     
 #-----------------------------------------------------------------------------#
 
-client = new xmpp.Client({jid: process.env.PLAYER_JID, password: process.env.PLAYER_PASSWORD})
+client = new xmpp.Client({jid: process.env.XMPP_JID, password: process.env.XMPP_PASSWORD})
 dp = new DummyPlayer(client)
 
 # This array is used as some kind of cache between the processes. We
