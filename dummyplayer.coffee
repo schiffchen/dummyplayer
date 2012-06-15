@@ -12,23 +12,50 @@ variables to allow our deploying machine to set up the settings dynamically.
 
 xmpp = require('node-xmpp')
 
-# I feel like I have to expand the String object because
-# I like to have a startsWith()
+# Just a little helper to determinate if a string
+# starts with something or not
 if typeof String.prototype.startsWith != 'function'
   String.prototype.startsWith = (str) ->
     this.indexOf(str) == 0
 
+# timestamp calculation in JS is ugly, so
+# we need that little helper method here.
+now_ts = ->
+  Math.round((new Date()).getTime() / 1000)
+
 #-----------------------------------------------------------------------------#
 
+###
+  BasicBot
+  
+  A very basic bot class. Simply does nothing but saying something
+  to someone
+###
 class BasicBot
   constructor: (@xmppClient) ->
   
+  ###
+    Say
+    
+    A method to send someone a message!
+    
+    Params:
+      - to [String] The recipent
+      - message [String] The message
+  ###
   say: (to, message) ->
     @xmppClient.send new xmpp.Element('message', {'type': 'chat', 'to': to})
       .c('body').t(message)
       
 #-----------------------------------------------------------------------------#
 
+###
+  DummyPlayer
+  
+  Our dummyplayer class handling everything
+  
+  Extends BasicBot
+###
 class DummyPlayer extends BasicBot
   ###
     showReadyStatus
@@ -145,8 +172,8 @@ class DummyPlayer extends BasicBot
 client = new xmpp.Client({jid: process.env.PLAYER_JID, password: process.env.PLAYER_PASSWORD})
 dp = new DummyPlayer(client)
 
-# global "cache", as we sometimes have to transfer stuff ignoring
-# nodejs non-blocking-io
+# This array is used as some kind of cache between the processes. We
+# have to do it that way because node js is non-blocking...
 globarr = new Array()
 
 #-----------------------------------------------------------------------------#
