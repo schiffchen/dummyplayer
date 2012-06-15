@@ -75,6 +75,8 @@ class DummyPlayer extends BasicBot
         globarr['queue_answer_to'] = stanza.from
       else if message.startsWith('queue id')
         @say(stanza.from, "I am queue##{globarr['queueid']}")
+      else if message.startsWith('send statistic')
+        @dummyStatistics()
       else
         @say(stanza.from, 'I am so sorry, I did not understand you! :-(')
   
@@ -103,7 +105,8 @@ class DummyPlayer extends BasicBot
       ping matchmaker - Sends a chat message to the matchmaker
       queue ping - Pings the queue to keep it alive
       queue me - Ask the matchmaker to enqueue the dummyplayer
-      queue id - Shows the current queue id""")
+      queue id - Shows the current queue id
+      send statistics - Sends a dummy result for statistics testing""")
   
   ###
     pingQueue
@@ -124,6 +127,17 @@ class DummyPlayer extends BasicBot
     @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
       .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
       .c('queueing', {'action': 'request'})
+  
+  ###
+    dummyStatistics
+    
+    Send dummy statistics to the matchmaker
+  ###
+  dummyStatistics: ->
+    @xmppClient.send new xmpp.Element('message', {'type': 'normal', 'to': 'matchmaker@battleship.me'})
+      .c('battleship', {'xmlns': 'http://battleship.me/xmlns/'})
+      .c('result', {'mid': '12345', 'winner': 'dummyplayer@battleship.me/debug'})
+      # <result mid="[match id]" winner="[winners jid]" />
     
     
 #-----------------------------------------------------------------------------#
